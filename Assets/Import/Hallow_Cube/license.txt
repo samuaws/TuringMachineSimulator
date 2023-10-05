@@ -1,0 +1,11 @@
+Model Information:
+* title:	Hallow Cube
+* source:	https://sketchfab.com/3d-models/hallow-cube-b702b517a0d3499fb0cb9b92b7bb413d
+* author:	Jovian Blaze (https://sketchfab.com/Jovian_Blaze)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Hallow Cube" (https://sketchfab.com/3d-models/hallow-cube-b702b517a0d3499fb0cb9b92b7bb413d) by Jovian Blaze (https://sketchfab.com/Jovian_Blaze) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
