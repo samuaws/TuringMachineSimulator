@@ -50,7 +50,7 @@ public class DTM : MonoBehaviour
 
     public Result Run(string inputString)
     {
-        this.tape = new List<char>(inputString) { 'B' };
+        tape = new List<char>(inputString) { 'B' };
         string currentState = startState;
         foreach (char c in inputString)
         {

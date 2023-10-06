@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Rendering;
+
 
 [Serializable]
 public class Result
@@ -29,35 +32,37 @@ public class TuringMachine : MonoBehaviour
     [HideInInspector]
     public GameObject head;
     public Dictionary<int,GameObject> tapeCases = new Dictionary<int,GameObject>();
+    public TextMeshProUGUI accept;
+    public TextMeshProUGUI rubon;
     private void Awake()
     {
         instance = this;
     }
-    private void Start()
+    public void StartSimulation()
     {
 
-        var states = new HashSet<string> { "q0", "q1", "q2" };
-        var inputAlphabet = new HashSet<char> { '0', '1' };
-        var tapeAlphabet = new HashSet<char> { '0', '1', 'B' };
-        var transitions = new Dictionary<Tuple<string, char>, Tuple<string, char, char>>
-        {
-            { Tuple.Create("q0", '0'), Tuple.Create("q0", '1', 'R') },
-            { Tuple.Create("q0", '1'), Tuple.Create("q0", '0', 'R') },
-            { Tuple.Create("q0", 'B'), Tuple.Create("q1", 'B', 'L') },
-        };
-        var startState = "q0";
-        var acceptState = "q1";
-        var rejectState = "q2";
+        //var states = new HashSet<string> { "q0", "q1", "q2" };
+        //var inputAlphabet = new HashSet<char> { '0', '1' };
+        //var tapeAlphabet = new HashSet<char> { '0', '1', 'B' };
+        //var transitions = new Dictionary<Tuple<string, char>, Tuple<string, char, char>>
+        //{
+        //    { Tuple.Create("q0", '0'), Tuple.Create("q0", '1', 'R') },
+        //    { Tuple.Create("q0", '1'), Tuple.Create("q0", '0', 'R') },
+        //    { Tuple.Create("q0", 'B'), Tuple.Create("q1", 'B', 'L') },
+        //};
+        //var startState = "q0";
+        //var acceptState = "q1";
+        //var rejectState = "q2";
 
 
-        // Create and run the DTM
-        DTM.Instance.states = states;
-        DTM.Instance.inputAlphabet = inputAlphabet;
-        DTM.Instance.tapeAlphabet = tapeAlphabet;
-        DTM.Instance.transitions = transitions;
-        DTM.Instance.startState = startState;
-        DTM.Instance.acceptState = acceptState;
-        DTM.Instance.rejectState = rejectState;
+        //// Create and run the DTM
+        //DTM.Instance.states = states;
+        //DTM.Instance.inputAlphabet = inputAlphabet;
+        //DTM.Instance.tapeAlphabet = tapeAlphabet;
+        //DTM.Instance.transitions = transitions;
+        //DTM.Instance.startState = startState;
+        //DTM.Instance.acceptState = acceptState;
+        //DTM.Instance.rejectState = rejectState;
 
 
         GenerateInputCubes();
@@ -65,14 +70,16 @@ public class TuringMachine : MonoBehaviour
 
         var result = DTM.Instance.Run(inputString);
 
-        if (result.finalState == acceptState)
+        if (result.finalState == DTM.Instance.acceptState)
         {
+            accept.text = $"{result.finalState} The DTM accepted the input: {inputString}";
+            rubon.text = $"l'etat du rubon a la fin {result.finalTape}";
             print($"{result.finalState} The DTM accepted the input: {inputString}");
-            print(result.finalTape);
         }
         else
         {
-            print($"{result.finalState} The DTM rejected the input: {inputString}");
+            accept.text = $"{result.finalState} The DTM rejected the input: {inputString}";
+            rubon.text = $"l'etat du rubon a la fin {result.finalTape}";
             print(result.finalTape);
         }
     }
@@ -97,5 +104,19 @@ public class TuringMachine : MonoBehaviour
     {
         head = Instantiate(tapeCasePrefab, Vector3.up + Vector3.right * DTM.Instance.headPosition, Quaternion.identity);
         head.GetComponent<TapeCase>().screenText.text = DTM.Instance.startState;
+    }
+    public void RetryInput()
+    {
+        foreach( var go in tapeCases)
+        {
+            Destroy(go.Value);
+        }
+        tapeCases.Clear();
+        Destroy(head);
+        DTM.Instance.headPosition = 0;
+    }
+    public void RestarMachine()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
